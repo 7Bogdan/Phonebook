@@ -1,6 +1,7 @@
 const express = require("express");
 const MongoClient = require("mongodb").MongoClient;
 const objectId = require("mongodb").ObjectID;
+const sanitize = require("mongo-sanitize")
 
 const app = express();
 const jsonParser = express.json();
@@ -15,7 +16,7 @@ mongoClient.connect(function(err, client){
  if(err) return console.log(err);
  dbClient = client;
  app.locals.collection = client.db("usersdb").collection("users");
- app.listen(3000, function(){
+ app.listen(3030, function(){
   console.log("Сервер ожидает подключения...");
  });
 });
@@ -39,20 +40,21 @@ app.get("/api/users/:id", function(req, res){
 
 app.post("/api/users", jsonParser, function (req, res) {
  if(!req.body) return res.sendStatus(400);
- let userName = req.body.name;
- let userSurname = req.body.surname;
- let userCity = req.body.city;
- let userTelephoneNumber= req.body.telephoneNumber;
- let userEmail = req.body.email;
- let user = {
+ let user = req.body;
+ let userName = sanitize(user.name);
+ let userSurname = sanitize(user.surname);
+ let userCity = sanitize(user.city);
+ let userTelephoneNumber= sanitize(user.telephoneNumber);
+ let userEmail = sanitize(user.email);
+ let userList = {
   name: userName,surname:userSurname, city:userCity,
   telephoneNumber:userTelephoneNumber,email:userEmail
  };
 
  let collection = req.app.locals.collection;
- collection.insertOne(user, function(err, result){
+ collection.insertOne(userList, function(err, result){
   if(err) return console.log(err);
-  res.send(user);
+  res.send(userList);
  });
 });
 
@@ -68,13 +70,13 @@ app.delete("/api/users/:id", function(req, res){
 
 app.put("/api/users", jsonParser, function(req, res){
  if(!req.body) return res.sendStatus(400);
-
- let id = new objectId(req.body.id);
- let userName = req.body.name;
- let userSurname = req.body.surname;
- let userTelephoneNumber= req.body.telephoneNumber;
- let userCity = req.body.city;
- let userEmail = req.body.email;
+ let user = req.body
+ let id = new objectId(user.id);
+ let userName = sanitize(user.name);
+ let userSurname = sanitize(user.surname);
+ let userTelephoneNumber= sanitize(user.telephoneNumber);
+ let userCity = sanitize(user.city);
+ let userEmail = sanitize(user.email);
 
  let collection = req.app.locals.collection;
  collection.findOneAndUpdate({_id: id}, { $set:
@@ -84,8 +86,8 @@ app.put("/api/users", jsonParser, function(req, res){
   }
  },{returnOriginal: false },function(err, result){
   if(err) return console.log(err);
-  let user = result.value;
-  res.send(user);
+  let userList = result.value;
+  res.send(userList);
  });
 });
 
