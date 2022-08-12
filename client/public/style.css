@@ -1,0 +1,28 @@
+h2,
+h5 {
+  text-align: center;
+}
+
+.edit {
+  cursor: pointer;
+}
+
+.remove {
+  cursor: pointer;
+}
+
+.sort {
+  pointer-events: none;
+}
+
+.search {
+  margin: 10px;
+}
+.input-group-text {
+  width: 95px;
+}
+
+.justify-content-md-center {
+  margin-top: 5%;
+  margin-left: 3%;
+}

@@ -1,0 +1,23 @@
+{
+  "name": "Phonebook",
+  "version": "1.0.0",
+  "description": "Phonebook",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "server": "nodemon app.js",
+    "client": "npm run start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
+  },
+  "dependencies": {
+    "bootstrap": "^4.5.2",
+    "express": "^4.17.1",
+    "mongo-sanitize": "^1.1.0",
+    "mongoose": "^5.8.1",
+    "react-bootstrap": "^1.3.0"
+  },
+  "devDependencies": {
+    "concurrently": "^5.0.2",
+    "nodemon": "^2.0.2"
+  }
+}
